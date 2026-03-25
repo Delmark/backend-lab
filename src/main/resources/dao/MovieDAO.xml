@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="by.delmark.backendlab.dao.MovieDAO">
+
+    <resultMap id="movieMap" type="by.delmark.backendlab.pojo.model.Movie">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="director" column="director"/>
+        <result property="releaseYear" column="release_year"/>
+        <result property="rating" column="rating"/>
+        <result property="available" column="available"/>
+    </resultMap>
+
+    <select id="getMovies" resultMap="movieMap">
+        SELECT
+            *
+        FROM movie
+    </select>
+
+    <select id="getMovieById" resultMap="movieMap">
+        SELECT
+            *
+        FROM movie
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertMovie">
+        INSERT INTO movie (title, director, release_year, rating, available)
+        VALUES (#{title}, #{director}, #{releaseYear}, #{rating}, #{available})
+    </insert>
+
+    <update id="updateMovie">
+        UPDATE movie
+        SET
+            title = #{movie.title},
+            director = #{movie.director},
+            release_year = #{movie.releaseYear},
+            rating = #{movie.rating},
+            available = #{movie.available}
+        WHERE id = #{id}
+    </update>
+
+    <update id="patchMovie">
+        UPDATE movie
+        <set>
+            <if test="movie.title != null">
+                title = #{movie.title},
+            </if>
+            <if test="movie.director != null">
+                director = #{movie.director},
+            </if>
+            <if test="movie.releaseYear != null">
+                release_year = #{movie.releaseYear},
+            </if>
+            <if test="movie.rating != null">
+                rating = #{movie.rating},
+            </if>
+            <if test="movie.available != null">
+                available = #{movie.available}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteMovie">
+        DELETE FROM movie
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -1,10 +1,9 @@
 package by.delmark.backendlab.controller;
 
-import by.delmark.backendlab.pojo.model.Course;
-import by.delmark.backendlab.pojo.request.CourseRequest;
-import by.delmark.backendlab.service.CourseService;
+import by.delmark.backendlab.pojo.model.Movie;
+import by.delmark.backendlab.pojo.request.MovieRequest;
+import by.delmark.backendlab.service.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,46 +29,46 @@ import java.util.List;
 @SecurityRequirement(name = "Bearer Authentication")
 public class EntityController {
 
-    private final CourseService courseService;
+    private final MovieService movieService;
 
-    @Operation(description = "Получение всех курсов")
+    @Operation(description = "Получение всех фильмов")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Course>> getAllEntities() {
-        return ResponseEntity.ok(courseService.getAllCourses());
+    public ResponseEntity<List<Movie>> getAllEntities() {
+        return ResponseEntity.ok(movieService.getAllMovies());
     }
 
-    @Operation(description = "Получение курса по идентификатору")
+    @Operation(description = "Получение фильма по идентификатору")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Course> getEntity(@PathVariable Long id) {
-        Course course = courseService.getCourseById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Курс не найден"));
-        return ResponseEntity.ok(course);
+    public ResponseEntity<Movie> getEntity(@PathVariable Long id) {
+        Movie movie = movieService.getMovieById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Фильм не найден"));
+        return ResponseEntity.ok(movie);
     }
 
-    @Operation(description = "Создание курса")
+    @Operation(description = "Создание фильма")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createEntity(@Valid @RequestBody CourseRequest course) {
-        courseService.saveCourse(course);
+    public ResponseEntity<Void> createEntity(@Valid @RequestBody MovieRequest movieRequest) {
+        movieService.saveMovie(movieRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(description = "Обновление курса (целиком)")
+    @Operation(description = "Обновление фильма (целиком)")
     @PutMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateEntity(@PathVariable Long id, @Valid @RequestBody CourseRequest course) {
-        courseService.updateCourse(id, course);
+    public ResponseEntity<Void> updateEntity(@PathVariable Long id, @Valid @RequestBody MovieRequest movieRequest) {
+        movieService.updateMovie(id, movieRequest);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(description = "Обновление курса (частично)")
+    @Operation(description = "Обновление фильма (частично)")
     @PatchMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> patchEntity(@PathVariable Long id, @RequestBody CourseRequest course) {
-        courseService.patchCourse(id, course);
+    public ResponseEntity<Void> patchEntity(@PathVariable Long id, @RequestBody MovieRequest movieRequest) {
+        movieService.patchMovie(id, movieRequest);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(description = "Удаление курса")
+    @Operation(description = "Удаление фильма")
     @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteEntity(@PathVariable Long id) {
-        courseService.deleteCourse(id);
+        movieService.deleteMovie(id);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,9 +1,9 @@
 package by.delmark.backendlab.service.impl;
 
-import by.delmark.backendlab.dao.CourseDAO;
-import by.delmark.backendlab.pojo.model.Course;
-import by.delmark.backendlab.pojo.request.CourseRequest;
-import by.delmark.backendlab.service.CourseService;
+import by.delmark.backendlab.dao.MovieDAO;
+import by.delmark.backendlab.pojo.model.Movie;
+import by.delmark.backendlab.pojo.request.MovieRequest;
+import by.delmark.backendlab.service.MovieService;
 import by.delmark.backendlab.utils.CaseUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,52 +24,52 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class CourseServiceImpl implements CourseService {
+public class MovieServiceImpl implements MovieService {
 
-    private final CourseDAO courseDAO;
+    private final MovieDAO movieDAO;
     private final Validator validator;
     private final ObjectMapper objectMapper = new ObjectMapper()
             .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
 
     @Override
-    public List<Course> getAllCourses() {
-        return courseDAO.getCourses();
+    public List<Movie> getAllMovies() {
+        return movieDAO.getMovies();
     }
 
     @Override
-    public Optional<Course> getCourseById(Long id) {
-        return courseDAO.getCourseById(id);
+    public Optional<Movie> getMovieById(Long id) {
+        return movieDAO.getMovieById(id);
     }
 
     @Override
-    public void saveCourse(CourseRequest course) {
-        courseDAO.insertCourse(course);
+    public void saveMovie(MovieRequest movieRequest) {
+        movieDAO.insertMovie(movieRequest);
     }
 
     @Override
-    public void updateCourse(Long id, CourseRequest course) {
-        courseDAO.getCourseById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Обновляемый курс не найден"));
-        courseDAO.updateCourse(course, id);
+    public void updateMovie(Long id, MovieRequest movieRequest) {
+        movieDAO.getMovieById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Обновляемый фильм не найден"));
+        movieDAO.updateMovie(movieRequest, id);
     }
 
     @Override
-    public void patchCourse(Long id, CourseRequest course) {
-        validatePatchChanges(course);
-        courseDAO.getCourseById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Обновляемый курс не найден"));
+    public void patchMovie(Long id, MovieRequest movieRequest) {
+        validatePatchChanges(movieRequest);
+        movieDAO.getMovieById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Обновляемый фильм не найден"));
 
-        courseDAO.patchCourse(course, id);
+        movieDAO.patchMovie(movieRequest, id);
     }
 
     @Override
-    public void deleteCourse(Long id) {
-        courseDAO.getCourseById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Удаляемый курс не найден"));
-        courseDAO.deleteCourse(id);
+    public void deleteMovie(Long id) {
+        movieDAO.getMovieById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Удаляемый фильм не найден"));
+        movieDAO.deleteMovie(id);
     }
 
-    private void validatePatchChanges(CourseRequest request) {
+    private void validatePatchChanges(MovieRequest request) {
         JsonNode requestJson = objectMapper.valueToTree(request);
 
         // быстрый хак на проверку того что есть хотя бы одно поле
@@ -83,7 +83,7 @@ public class CourseServiceImpl implements CourseService {
                 .map(CaseUtils::toCamelCase)
                 .toList();
 
-        Set<ConstraintViolation<CourseRequest>> violations = new HashSet<>();
+        Set<ConstraintViolation<MovieRequest>> violations = new HashSet<>();
         existingFields.forEach(field -> violations.addAll(validator.validateProperty(request, field)));
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
