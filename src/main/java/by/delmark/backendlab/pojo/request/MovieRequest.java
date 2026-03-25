@@ -29,6 +29,7 @@ public class MovieRequest {
     @Schema(description = "Год выпуска")
     @JsonProperty("release_year")
     @NotNull
+    @Min(1900)
     Integer releaseYear;
 
     @Schema(description = "Рейтинг")
