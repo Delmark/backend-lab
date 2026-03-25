@@ -5,6 +5,7 @@ import by.delmark.backendlab.pojo.request.UserRequest;
 import by.delmark.backendlab.service.AuthService;
 import by.delmark.backendlab.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +33,17 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
-    @Operation(summary = "Полученеи JWT токена")
-    @PostMapping(value = "/authorize", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Получение JWT токена")
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TokenResponse> authorize(@Valid @RequestBody UserRequest user) {
         return ResponseEntity.ok(authService.authorize(user));
     }
 
+    @Operation(summary = "Завершение сессии")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> invalidateJwtSession() {
+        authService.invalidateSession();
+        return ResponseEntity.ok().build();
+    }
 }

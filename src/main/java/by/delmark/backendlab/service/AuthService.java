@@ -5,4 +5,5 @@ import by.delmark.backendlab.pojo.request.UserRequest;
 
 public interface AuthService {
     TokenResponse authorize(UserRequest userRequest);
+    void invalidateSession();
 }
