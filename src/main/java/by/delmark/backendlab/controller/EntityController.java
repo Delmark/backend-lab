@@ -31,41 +31,41 @@ public class EntityController {
 
     private final MovieService movieService;
 
-    @Operation(description = "Получение всех фильмов")
+    @Operation(summary = "Получение всех фильмов")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Movie>> getAllEntities() {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
-    @Operation(description = "Получение фильма по идентификатору")
+    @Operation(summary = "Получение фильма по идентификатору")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Movie> getEntity(@PathVariable Long id) {
         Movie movie = movieService.getMovieById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Фильм не найден"));
         return ResponseEntity.ok(movie);
     }
 
-    @Operation(description = "Создание фильма")
+    @Operation(summary = "Создание фильма")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createEntity(@Valid @RequestBody MovieRequest movieRequest) {
         movieService.saveMovie(movieRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(description = "Обновление фильма (целиком)")
+    @Operation(summary = "Обновление фильма (целиком)")
     @PutMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateEntity(@PathVariable Long id, @Valid @RequestBody MovieRequest movieRequest) {
         movieService.updateMovie(id, movieRequest);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(description = "Обновление фильма (частично)")
+    @Operation(summary = "Обновление фильма (частично)")
     @PatchMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> patchEntity(@PathVariable Long id, @RequestBody MovieRequest movieRequest) {
         movieService.patchMovie(id, movieRequest);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(description = "Удаление фильма")
+    @Operation(summary = "Удаление фильма")
     @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteEntity(@PathVariable Long id) {
         movieService.deleteMovie(id);
