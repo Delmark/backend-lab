@@ -28,7 +28,7 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseDAO courseDAO;
     private final Validator validator;
-    private ObjectMapper objectMapper = new ObjectMapper()
+    private final ObjectMapper objectMapper = new ObjectMapper()
             .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
 
     @Override

@@ -48,7 +48,6 @@ public class EntityController {
 
     @Operation(description = "Создание курса")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createEntity(@Valid @RequestBody CourseRequest course) {
         courseService.saveCourse(course);
         return ResponseEntity.status(HttpStatus.CREATED).build();
