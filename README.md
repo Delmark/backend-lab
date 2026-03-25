@@ -17,6 +17,6 @@ DB_USERNAME=
 DB_PASSWORD=
 ```
 
-2. Из директории проекта выполнить команду `docker build -t delmark-backend-lab .`
-3. Из директории проекта выполнить команду `docker run -p 8080:8080 --env-file=.env delmark-backend-lab`
-4. Можно тестировать приложение
+2. Собрать образ проекта в докере выполнив команду `docker build -t delmark-backend-lab .`
+3. Запустить контейнер с приложением выполнив команду `docker run -p 8080:8080 --env-file=.env delmark-backend-lab`
+4. Можно тестировать приложение, url сваггера: `http://localhost:8080/swagger-ui/index.html`
