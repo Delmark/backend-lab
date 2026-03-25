@@ -1,5 +1,6 @@
 package by.delmark.backendlab.config.security;
 
+import by.delmark.backendlab.service.TokenBlacklistService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -13,10 +14,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtParser jwtParser;
     private final UserDetailsService userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     private final ObjectMapper objectMapper = new ObjectMapper()
             .addMixIn(ProblemDetail.class, ProblemDetailsRenameMixin.class)
@@ -39,6 +43,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
             try {
+                if (tokenBlacklistService.isTokenBlacklisted(token)) {
+                    throw new AccessDeniedException("Сессия для данного токена была досрочно закрыта");
+                }
                 Jws<Claims> claims = jwtParser.parseSignedClaims(token);
                 String username = claims.getPayload().getSubject();
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
