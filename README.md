@@ -11,7 +11,9 @@
 
 1. Необходимо заполнить переменные окружения учётными данными для БД в файле .env
 ```
-DB_ADDRESS=ip:port
+#ip:port
+DB_ADDRESS=
+#database name
 DB_NAME=
 DB_USERNAME=
 DB_PASSWORD=
