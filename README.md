@@ -17,10 +17,19 @@
 Сваггер доступен по url: `/swagger-ui/index.html`
 
 ### Авторизация
+
 ```
 POST /auth/register - Регистрация пользователя
 POST /auth/login - Получение JWT токена
 POST /auth/logout - Завершение сессии
+```
+
+Тело запроса для POST /auth/register и POST /auth/login
+```
+{
+  "login": "string",
+  "password": "string"
+}
 ```
 
 ### Фильмы
@@ -31,6 +40,18 @@ POST /entity - создание фильма
 PATCH /entity/{id} - частичное редактирование фильма
 PUT /entity/{id} - полная перезапись информации о фильме
 DELETE /entity/{id} - удаление фильма
+```
+
+Тело запроса для POST, PATCH, PUT /entity
+
+```
+{
+  "title": "string",
+  "director": "string",
+  "rating": 10,
+  "available": true,
+  "release_year": 1900
+}
 ```
 
 ## Запуск приложения
